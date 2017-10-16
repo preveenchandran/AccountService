@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccountModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="EntAccount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Enterprise">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AddressLine1" Type="varchar" MaxLength="50" />
+    <Property Name="AddressLine2" Type="varchar" MaxLength="50" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
+    <Property Name="StateId" Type="int" />
+    <Property Name="Zip" Type="varchar" MaxLength="50" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Office">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LocationId" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="EntId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MiddeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ResParty">
+    <Key>
+      <PropertyRef Name="ResPartyId" />
+    </Key>
+    <Property Name="ResPartyId" Type="int" Nullable="false" />
+    <Property Name="PatId" Type="int" Nullable="false" />
+    <Property Name="CareerId" Type="int" />
+  </EntityType>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Code" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="FK_Location_State">
+    <End Role="State" Type="Self.State" Multiplicity="0..1" />
+    <End Role="Location" Type="Self.Location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="State">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Location">
+        <PropertyRef Name="StateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Practice_EntAccount">
+    <End Role="EntAccount" Type="Self.EntAccount" Multiplicity="1" />
+    <End Role="Office" Type="Self.Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EntAccount">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Practice_Enterprise">
+    <End Role="Enterprise" Type="Self.Enterprise" Multiplicity="1" />
+    <End Role="Office" Type="Self.Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Enterprise">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="EntId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Practice_Location">
+    <End Role="Location" Type="Self.Location" Multiplicity="1" />
+    <End Role="Office" Type="Self.Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Location">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="LocationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AccountModelStoreContainer">
+    <EntitySet Name="EntAccount" EntityType="Self.EntAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Enterprise" EntityType="Self.Enterprise" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Office" EntityType="Self.Office" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResParty" EntityType="Self.ResParty" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Location_State" Association="Self.FK_Location_State">
+      <End Role="State" EntitySet="State" />
+      <End Role="Location" EntitySet="Location" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Practice_EntAccount" Association="Self.FK_Practice_EntAccount">
+      <End Role="EntAccount" EntitySet="EntAccount" />
+      <End Role="Office" EntitySet="Office" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Practice_Enterprise" Association="Self.FK_Practice_Enterprise">
+      <End Role="Enterprise" EntitySet="Enterprise" />
+      <End Role="Office" EntitySet="Office" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Practice_Location" Association="Self.FK_Practice_Location">
+      <End Role="Location" EntitySet="Location" />
+      <End Role="Office" EntitySet="Office" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

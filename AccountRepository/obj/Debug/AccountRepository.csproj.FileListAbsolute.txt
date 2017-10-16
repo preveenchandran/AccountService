@@ -1,0 +1,13 @@
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\AccountRepository.dll.config
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\AccountRepository.dll
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\AccountRepository.pdb
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\EntityFramework.dll
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\EntityFramework.SqlServer.dll
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\EntityFramework.xml
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\EntityFramework.SqlServer.xml
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\obj\Debug\AccountRepository.csprojResolveAssemblyReference.cache
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\obj\Debug\AccountRepository.csproj.CoreCompileInputs.cache
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\obj\Debug\AccountRepository.dll
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\obj\Debug\AccountRepository.pdb
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\AccountContract.dll
+C:\My Folders\HealthCareSolutions\AccountService\AccountRepository\bin\Debug\AccountContract.pdb

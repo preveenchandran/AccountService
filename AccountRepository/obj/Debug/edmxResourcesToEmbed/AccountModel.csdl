@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccountModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AccountEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Enterprises" EntityType="AccountModel.Enterprise" />
+    <EntitySet Name="Patients" EntityType="AccountModel.Patient" />
+    <EntitySet Name="ResParties" EntityType="AccountModel.ResParty" />
+    <EntitySet Name="States" EntityType="AccountModel.State" />
+    <EntitySet Name="Locations" EntityType="AccountModel.Location" />
+    <AssociationSet Name="FK_Location_State" Association="AccountModel.FK_Location_State">
+      <End Role="State" EntitySet="States" />
+      <End Role="Location" EntitySet="Locations" />
+    </AssociationSet>
+    <EntitySet Name="EntAccounts" EntityType="AccountModel.EntAccount" />
+    <EntitySet Name="Offices" EntityType="AccountModel.Office" />
+    <AssociationSet Name="FK_Practice_EntAccount" Association="AccountModel.FK_Practice_EntAccount">
+      <End Role="EntAccount" EntitySet="EntAccounts" />
+      <End Role="Office" EntitySet="Offices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Practice_Enterprise" Association="AccountModel.FK_Practice_Enterprise">
+      <End Role="Enterprise" EntitySet="Enterprises" />
+      <End Role="Office" EntitySet="Offices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Practice_Location" Association="AccountModel.FK_Practice_Location">
+      <End Role="Location" EntitySet="Locations" />
+      <End Role="Office" EntitySet="Offices" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Enterprise">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Offices" Relationship="AccountModel.FK_Practice_Enterprise" FromRole="Enterprise" ToRole="Office" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MiddeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ResParty">
+    <Key>
+      <PropertyRef Name="ResPartyId" />
+    </Key>
+    <Property Name="ResPartyId" Type="Int32" Nullable="false" />
+    <Property Name="PatId" Type="Int32" Nullable="false" />
+    <Property Name="CareerId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Locations" Relationship="AccountModel.FK_Location_State" FromRole="State" ToRole="Location" />
+  </EntityType>
+  <EntityType Name="Location">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StateId" Type="Int32" />
+    <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="State" Relationship="AccountModel.FK_Location_State" FromRole="Location" ToRole="State" />
+    <NavigationProperty Name="Offices" Relationship="AccountModel.FK_Practice_Location" FromRole="Location" ToRole="Office" />
+  </EntityType>
+  <Association Name="FK_Location_State">
+    <End Type="AccountModel.State" Role="State" Multiplicity="0..1" />
+    <End Type="AccountModel.Location" Role="Location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="State">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Location">
+        <PropertyRef Name="StateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="EntAccount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Offices" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="EntAccount" ToRole="Office" />
+  </EntityType>
+  <EntityType Name="Office">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LocationId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="EntId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="EntAccount" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="Office" ToRole="EntAccount" />
+    <NavigationProperty Name="Enterprise" Relationship="AccountModel.FK_Practice_Enterprise" FromRole="Office" ToRole="Enterprise" />
+    <NavigationProperty Name="Location" Relationship="AccountModel.FK_Practice_Location" FromRole="Office" ToRole="Location" />
+  </EntityType>
+  <Association Name="FK_Practice_EntAccount">
+    <End Type="AccountModel.EntAccount" Role="EntAccount" Multiplicity="1" />
+    <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EntAccount">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Practice_Enterprise">
+    <End Type="AccountModel.Enterprise" Role="Enterprise" Multiplicity="1" />
+    <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Enterprise">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="EntId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Practice_Location">
+    <End Type="AccountModel.Location" Role="Location" Multiplicity="1" />
+    <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Location">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Office">
+        <PropertyRef Name="LocationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
