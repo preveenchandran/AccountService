@@ -59,11 +59,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="EntActOffs">
+      <EntityTypeMapping TypeName="AccountModel.EntActOff">
+        <MappingFragment StoreEntitySet="EntActOff">
+          <ScalarProperty Name="OfficeId" ColumnName="OfficeId" />
+          <ScalarProperty Name="EntActId" ColumnName="EntActId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Offices">
       <EntityTypeMapping TypeName="AccountModel.Office">
         <MappingFragment StoreEntitySet="Office">
           <ScalarProperty Name="EntId" ColumnName="EntId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="LocationId" ColumnName="LocationId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Id" ColumnName="Id" />

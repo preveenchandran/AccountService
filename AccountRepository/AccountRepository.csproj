@@ -67,6 +67,10 @@
     <Compile Include="EntAccount.cs">
       <DependentUpon>AccountModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntAccountRepository.cs" />
+    <Compile Include="EntActOff.cs">
+      <DependentUpon>AccountModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Enterprise.cs">
       <DependentUpon>AccountModel.tt</DependentUpon>
     </Compile>
@@ -77,6 +81,7 @@
     <Compile Include="Office.cs">
       <DependentUpon>AccountModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="OfficeRepository.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>AccountModel.tt</DependentUpon>
     </Compile>

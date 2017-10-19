@@ -8,6 +8,14 @@
     <Property Name="UserName" Type="varchar" MaxLength="50" />
     <Property Name="Password" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="EntActOff">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EntActId" Type="int" />
+    <Property Name="OfficeId" Type="int" />
+  </EntityType>
   <EntityType Name="Enterprise">
     <Key>
       <PropertyRef Name="Id" />
@@ -31,10 +39,9 @@
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="LocationId" Type="int" Nullable="false" />
-    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="LocationId" Type="int" />
     <Property Name="EntId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Patient">
@@ -62,6 +69,30 @@
     <Property Name="Name" Type="varchar" MaxLength="50" />
     <Property Name="Code" Type="varchar" MaxLength="10" />
   </EntityType>
+  <Association Name="FK_EntActOff_EntAct">
+    <End Role="EntAccount" Type="Self.EntAccount" Multiplicity="0..1" />
+    <End Role="EntActOff" Type="Self.EntActOff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EntAccount">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EntActOff">
+        <PropertyRef Name="EntActId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EntActOff_Office">
+    <End Role="Office" Type="Self.Office" Multiplicity="0..1" />
+    <End Role="EntActOff" Type="Self.EntActOff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Office">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EntActOff">
+        <PropertyRef Name="OfficeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Location_State">
     <End Role="State" Type="Self.State" Multiplicity="0..1" />
     <End Role="Location" Type="Self.Location" Multiplicity="*" />
@@ -71,18 +102,6 @@
       </Principal>
       <Dependent Role="Location">
         <PropertyRef Name="StateId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Practice_EntAccount">
-    <End Role="EntAccount" Type="Self.EntAccount" Multiplicity="1" />
-    <End Role="Office" Type="Self.Office" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EntAccount">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Office">
-        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -99,7 +118,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Practice_Location">
-    <End Role="Location" Type="Self.Location" Multiplicity="1" />
+    <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
     <End Role="Office" Type="Self.Office" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Location">
@@ -112,19 +131,24 @@
   </Association>
   <EntityContainer Name="AccountModelStoreContainer">
     <EntitySet Name="EntAccount" EntityType="Self.EntAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EntActOff" EntityType="Self.EntActOff" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Enterprise" EntityType="Self.Enterprise" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Office" EntityType="Self.Office" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ResParty" EntityType="Self.ResParty" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_EntActOff_EntAct" Association="Self.FK_EntActOff_EntAct">
+      <End Role="EntAccount" EntitySet="EntAccount" />
+      <End Role="EntActOff" EntitySet="EntActOff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EntActOff_Office" Association="Self.FK_EntActOff_Office">
+      <End Role="Office" EntitySet="Office" />
+      <End Role="EntActOff" EntitySet="EntActOff" />
+    </AssociationSet>
     <AssociationSet Name="FK_Location_State" Association="Self.FK_Location_State">
       <End Role="State" EntitySet="State" />
       <End Role="Location" EntitySet="Location" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Practice_EntAccount" Association="Self.FK_Practice_EntAccount">
-      <End Role="EntAccount" EntitySet="EntAccount" />
-      <End Role="Office" EntitySet="Office" />
     </AssociationSet>
     <AssociationSet Name="FK_Practice_Enterprise" Association="Self.FK_Practice_Enterprise">
       <End Role="Enterprise" EntitySet="Enterprise" />

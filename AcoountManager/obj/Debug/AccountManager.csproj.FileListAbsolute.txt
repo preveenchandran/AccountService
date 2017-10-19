@@ -1,0 +1,8 @@
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\bin\Debug\AcoountManager.dll
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\bin\Debug\AcoountManager.pdb
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\bin\Debug\AccountContract.dll
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\bin\Debug\AccountContract.pdb
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\obj\Debug\AccountManager.csprojResolveAssemblyReference.cache
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\obj\Debug\AccountManager.csproj.CoreCompileInputs.cache
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\obj\Debug\AcoountManager.dll
+C:\My Folders\HealthCareSolutions\AccountService\AcoountManager\obj\Debug\AcoountManager.pdb

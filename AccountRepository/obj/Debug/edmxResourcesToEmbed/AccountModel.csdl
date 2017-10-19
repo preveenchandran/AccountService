@@ -11,10 +11,15 @@
       <End Role="Location" EntitySet="Locations" />
     </AssociationSet>
     <EntitySet Name="EntAccounts" EntityType="AccountModel.EntAccount" />
+    <EntitySet Name="EntActOffs" EntityType="AccountModel.EntActOff" />
     <EntitySet Name="Offices" EntityType="AccountModel.Office" />
-    <AssociationSet Name="FK_Practice_EntAccount" Association="AccountModel.FK_Practice_EntAccount">
+    <AssociationSet Name="FK_EntActOff_EntAct" Association="AccountModel.FK_EntActOff_EntAct">
       <End Role="EntAccount" EntitySet="EntAccounts" />
+      <End Role="EntActOff" EntitySet="EntActOffs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EntActOff_Office" Association="AccountModel.FK_EntActOff_Office">
       <End Role="Office" EntitySet="Offices" />
+      <End Role="EntActOff" EntitySet="EntActOffs" />
     </AssociationSet>
     <AssociationSet Name="FK_Practice_Enterprise" Association="AccountModel.FK_Practice_Enterprise">
       <End Role="Enterprise" EntitySet="Enterprises" />
@@ -92,30 +97,51 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Offices" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="EntAccount" ToRole="Office" />
+    <NavigationProperty Name="EntActOffs" Relationship="AccountModel.FK_EntActOff_EntAct" FromRole="EntAccount" ToRole="EntActOff" />
+  </EntityType>
+  <EntityType Name="EntActOff">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EntActId" Type="Int32" />
+    <Property Name="OfficeId" Type="Int32" />
+    <NavigationProperty Name="EntAccount" Relationship="AccountModel.FK_EntActOff_EntAct" FromRole="EntActOff" ToRole="EntAccount" />
+    <NavigationProperty Name="Office" Relationship="AccountModel.FK_EntActOff_Office" FromRole="EntActOff" ToRole="Office" />
   </EntityType>
   <EntityType Name="Office">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="LocationId" Type="Int32" Nullable="false" />
-    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="LocationId" Type="Int32" />
     <Property Name="EntId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="EntAccount" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="Office" ToRole="EntAccount" />
+    <NavigationProperty Name="EntActOffs" Relationship="AccountModel.FK_EntActOff_Office" FromRole="Office" ToRole="EntActOff" />
     <NavigationProperty Name="Enterprise" Relationship="AccountModel.FK_Practice_Enterprise" FromRole="Office" ToRole="Enterprise" />
     <NavigationProperty Name="Location" Relationship="AccountModel.FK_Practice_Location" FromRole="Office" ToRole="Location" />
   </EntityType>
-  <Association Name="FK_Practice_EntAccount">
-    <End Type="AccountModel.EntAccount" Role="EntAccount" Multiplicity="1" />
-    <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
+  <Association Name="FK_EntActOff_EntAct">
+    <End Type="AccountModel.EntAccount" Role="EntAccount" Multiplicity="0..1" />
+    <End Type="AccountModel.EntActOff" Role="EntActOff" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="EntAccount">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Office">
-        <PropertyRef Name="UserId" />
+      <Dependent Role="EntActOff">
+        <PropertyRef Name="EntActId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EntActOff_Office">
+    <End Type="AccountModel.Office" Role="Office" Multiplicity="0..1" />
+    <End Type="AccountModel.EntActOff" Role="EntActOff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Office">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EntActOff">
+        <PropertyRef Name="OfficeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -132,7 +158,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Practice_Location">
-    <End Type="AccountModel.Location" Role="Location" Multiplicity="1" />
+    <End Type="AccountModel.Location" Role="Location" Multiplicity="0..1" />
     <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Location">

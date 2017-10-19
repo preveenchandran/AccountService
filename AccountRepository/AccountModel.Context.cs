@@ -31,6 +31,7 @@ namespace AccountRepository
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<EntAccount> EntAccounts { get; set; }
+        public virtual DbSet<EntActOff> EntActOffs { get; set; }
         public virtual DbSet<Office> Offices { get; set; }
     }
 }

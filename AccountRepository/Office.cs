@@ -14,13 +14,19 @@ namespace AccountRepository
     
     public partial class Office
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Office()
+        {
+            this.EntActOffs = new HashSet<EntActOff>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public int LocationId { get; set; }
-        public int UserId { get; set; }
+        public Nullable<int> LocationId { get; set; }
         public int EntId { get; set; }
     
-        public virtual EntAccount EntAccount { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EntActOff> EntActOffs { get; set; }
         public virtual Enterprise Enterprise { get; set; }
         public virtual Location Location { get; set; }
     }

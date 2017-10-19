@@ -13,6 +13,14 @@
           <Property Name="UserName" Type="varchar" MaxLength="50" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="EntActOff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntActId" Type="int" />
+          <Property Name="OfficeId" Type="int" />
+        </EntityType>
         <EntityType Name="Enterprise">
           <Key>
             <PropertyRef Name="Id" />
@@ -36,10 +44,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="LocationId" Type="int" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="LocationId" Type="int" />
           <Property Name="EntId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Patient">
@@ -67,6 +74,30 @@
           <Property Name="Name" Type="varchar" MaxLength="50" />
           <Property Name="Code" Type="varchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_EntActOff_EntAct">
+          <End Role="EntAccount" Type="Self.EntAccount" Multiplicity="0..1" />
+          <End Role="EntActOff" Type="Self.EntActOff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EntAccount">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EntActOff">
+              <PropertyRef Name="EntActId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EntActOff_Office">
+          <End Role="Office" Type="Self.Office" Multiplicity="0..1" />
+          <End Role="EntActOff" Type="Self.EntActOff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Office">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EntActOff">
+              <PropertyRef Name="OfficeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Location_State">
           <End Role="State" Type="Self.State" Multiplicity="0..1" />
           <End Role="Location" Type="Self.Location" Multiplicity="*" />
@@ -76,18 +107,6 @@
             </Principal>
             <Dependent Role="Location">
               <PropertyRef Name="StateId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Practice_EntAccount">
-          <End Role="EntAccount" Type="Self.EntAccount" Multiplicity="1" />
-          <End Role="Office" Type="Self.Office" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EntAccount">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Office">
-              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -104,7 +123,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Practice_Location">
-          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
           <End Role="Office" Type="Self.Office" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Location">
@@ -117,19 +136,24 @@
         </Association>
         <EntityContainer Name="AccountModelStoreContainer">
           <EntitySet Name="EntAccount" EntityType="Self.EntAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EntActOff" EntityType="Self.EntActOff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Enterprise" EntityType="Self.Enterprise" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Office" EntityType="Self.Office" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Patient" EntityType="Self.Patient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResParty" EntityType="Self.ResParty" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_EntActOff_EntAct" Association="Self.FK_EntActOff_EntAct">
+            <End Role="EntAccount" EntitySet="EntAccount" />
+            <End Role="EntActOff" EntitySet="EntActOff" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EntActOff_Office" Association="Self.FK_EntActOff_Office">
+            <End Role="Office" EntitySet="Office" />
+            <End Role="EntActOff" EntitySet="EntActOff" />
+          </AssociationSet>
           <AssociationSet Name="FK_Location_State" Association="Self.FK_Location_State">
             <End Role="State" EntitySet="State" />
             <End Role="Location" EntitySet="Location" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Practice_EntAccount" Association="Self.FK_Practice_EntAccount">
-            <End Role="EntAccount" EntitySet="EntAccount" />
-            <End Role="Office" EntitySet="Office" />
           </AssociationSet>
           <AssociationSet Name="FK_Practice_Enterprise" Association="Self.FK_Practice_Enterprise">
             <End Role="Enterprise" EntitySet="Enterprise" />
@@ -155,10 +179,15 @@
             <End Role="Location" EntitySet="Locations" />
           </AssociationSet>
           <EntitySet Name="EntAccounts" EntityType="AccountModel.EntAccount" />
+          <EntitySet Name="EntActOffs" EntityType="AccountModel.EntActOff" />
           <EntitySet Name="Offices" EntityType="AccountModel.Office" />
-          <AssociationSet Name="FK_Practice_EntAccount" Association="AccountModel.FK_Practice_EntAccount">
+          <AssociationSet Name="FK_EntActOff_EntAct" Association="AccountModel.FK_EntActOff_EntAct">
             <End Role="EntAccount" EntitySet="EntAccounts" />
+            <End Role="EntActOff" EntitySet="EntActOffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EntActOff_Office" Association="AccountModel.FK_EntActOff_Office">
             <End Role="Office" EntitySet="Offices" />
+            <End Role="EntActOff" EntitySet="EntActOffs" />
           </AssociationSet>
           <AssociationSet Name="FK_Practice_Enterprise" Association="AccountModel.FK_Practice_Enterprise">
             <End Role="Enterprise" EntitySet="Enterprises" />
@@ -168,7 +197,7 @@
             <End Role="Location" EntitySet="Locations" />
             <End Role="Office" EntitySet="Offices" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="Enterprise">
           <Key>
             <PropertyRef Name="Id" />
@@ -236,30 +265,51 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Offices" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="EntAccount" ToRole="Office" />
+          <NavigationProperty Name="EntActOffs" Relationship="AccountModel.FK_EntActOff_EntAct" FromRole="EntAccount" ToRole="EntActOff" />
+        </EntityType>
+        <EntityType Name="EntActOff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EntActId" Type="Int32" />
+          <Property Name="OfficeId" Type="Int32" />
+          <NavigationProperty Name="EntAccount" Relationship="AccountModel.FK_EntActOff_EntAct" FromRole="EntActOff" ToRole="EntAccount" />
+          <NavigationProperty Name="Office" Relationship="AccountModel.FK_EntActOff_Office" FromRole="EntActOff" ToRole="Office" />
         </EntityType>
         <EntityType Name="Office">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LocationId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="LocationId" Type="Int32" />
           <Property Name="EntId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="EntAccount" Relationship="AccountModel.FK_Practice_EntAccount" FromRole="Office" ToRole="EntAccount" />
+          <NavigationProperty Name="EntActOffs" Relationship="AccountModel.FK_EntActOff_Office" FromRole="Office" ToRole="EntActOff" />
           <NavigationProperty Name="Enterprise" Relationship="AccountModel.FK_Practice_Enterprise" FromRole="Office" ToRole="Enterprise" />
           <NavigationProperty Name="Location" Relationship="AccountModel.FK_Practice_Location" FromRole="Office" ToRole="Location" />
         </EntityType>
-        <Association Name="FK_Practice_EntAccount">
-          <End Type="AccountModel.EntAccount" Role="EntAccount" Multiplicity="1" />
-          <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
+        <Association Name="FK_EntActOff_EntAct">
+          <End Type="AccountModel.EntAccount" Role="EntAccount" Multiplicity="0..1" />
+          <End Type="AccountModel.EntActOff" Role="EntActOff" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="EntAccount">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Office">
-              <PropertyRef Name="UserId" />
+            <Dependent Role="EntActOff">
+              <PropertyRef Name="EntActId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EntActOff_Office">
+          <End Type="AccountModel.Office" Role="Office" Multiplicity="0..1" />
+          <End Type="AccountModel.EntActOff" Role="EntActOff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Office">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EntActOff">
+              <PropertyRef Name="OfficeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -276,7 +326,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Practice_Location">
-          <End Type="AccountModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="AccountModel.Location" Role="Location" Multiplicity="0..1" />
           <End Type="AccountModel.Office" Role="Office" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Location">
@@ -287,7 +337,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -351,11 +401,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="EntActOffs">
+            <EntityTypeMapping TypeName="AccountModel.EntActOff">
+              <MappingFragment StoreEntitySet="EntActOff">
+                <ScalarProperty Name="OfficeId" ColumnName="OfficeId" />
+                <ScalarProperty Name="EntActId" ColumnName="EntActId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Offices">
             <EntityTypeMapping TypeName="AccountModel.Office">
               <MappingFragment StoreEntitySet="Office">
                 <ScalarProperty Name="EntId" ColumnName="EntId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

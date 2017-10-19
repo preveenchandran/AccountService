@@ -41,10 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntAccountContract\EntAccount.cs" />
+    <Compile Include="EntAccountContract\IEntAccountManager.cs" />
+    <Compile Include="EntAccountContract\IEntAccountRepository.cs" />
     <Compile Include="EnterpriseContract\Enterprise.cs" />
     <Compile Include="EnterpriseContract\IEnterpriseManager.cs" />
     <Compile Include="EnterpriseContract\IEnterpriseRepository.cs" />
     <Compile Include="LocationContract\Location.cs" />
+    <Compile Include="OfficeContract\IOfficeRepository.cs" />
     <Compile Include="OfficeContract\Office.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
